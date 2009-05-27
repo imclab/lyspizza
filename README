@@ -1,11 +1,19 @@
 Lyspizza: Pizza ordering coordination
 
-You might need to change some settings to get it running locally
+Requirements:
+* django
 
+To get started:
+1. ./manage.py syncdb
+2. ./import.py
+3. ./manage.py runserver
+
+
+You might need to change some settings in settings.py to get it
+running locally.
 
 
 Fcgi setup for use with lighttpd:
-
 
 $HTTP["host"] == "lyspizza.wrya.net" {
 server.document-root = "/var/www/lyspizza/"
@@ -29,4 +37,3 @@ url.rewrite-once = (
 )
 
 }
-
