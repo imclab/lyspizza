@@ -1,0 +1,32 @@
+Lyspizza: Pizza ordering coordination
+
+You might need to change some settings to get it running locally
+
+
+
+Fcgi setup for use with lighttpd:
+
+
+$HTTP["host"] == "lyspizza.wrya.net" {
+server.document-root = "/var/www/lyspizza/"
+fastcgi.server = (
+    "/fcgi" => (
+        "main" => (
+            "host" => "127.0.0.1",
+            "port" => 3033,
+            "check-local" => "disable",
+        )
+    ),
+)
+alias.url = (
+    "/media" => "/usr/share/webapps/django/1.0.2-r1/htdocs/",
+)
+
+url.rewrite-once = (
+    "^(/media.*)$" => "$1",
+    "^/favicon\.ico$" => "/media/favicon.ico",
+    "^(/.*)$" => "/fcgi$1",
+)
+
+}
+

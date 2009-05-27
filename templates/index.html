@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Coming occasions:</h2>
+{% if coming %}
+ {% for x in coming %}
+  <a href="/occasion/{{ x.id }}/">{{ x }}</a><br>
+ {% endfor %}
+{% else %}
+ No coming occasions
+{% endif %}
+<h2>Past occasions:</h2>
+{% if past %}
+ {% for x in past %}
+  <a href="/occasion/{{ x.id }}/">{{ x }}</a><br>
+ {% endfor %}
+{% else %}
+ No past occasions
+{% endif %}
+{% endblock %}

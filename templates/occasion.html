@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>You:</h2>
+
+<h2>All attendants:</h2>
+{% if attn %}
+<table width="100%">
+<tr>
+<th>User</th>
+<th>To pay</th>
+<th>Paid?</th>
+<th>Items</th>
+<th>Notes</th>
+
+</tr>
+ {% for x in attn %}
+  <tr>
+   <td>{{ x.user.username }}</td>
+   <td>(to be added)</td>
+   <td>{{ x.paid }}</td>
+   <td>
+    {% for y in x.items.all %}
+      {{ y.name }}<br>
+    {% endfor%}
+   </td>
+   <td>{{ x.notes|linebreaksbr }}</td>
+  </tr>
+ {% endfor %}
+</table>
+{% else %}
+ <p>No attendants</p>
+{% endif %}
+
+
+
+<h2>Ordering JavaScript</h2>
+
+(to be added)
+
+
+
+{% endblock %}
+
+
