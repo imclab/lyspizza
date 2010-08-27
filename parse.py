@@ -8,13 +8,7 @@ import sys
 
 
 def parse_pizzerias():
-    # try:
     pizzerias_src = urlopen('http://onlinepizza.se/Linkoping/').read().decode('utf-8')
-    # except URLError:
-    #     #oops
-    #     pass
-    # except:
-    #     pass
 
     pizzerias = [];
 
@@ -31,12 +25,7 @@ def parse_pizzerias():
         pizzeria_id = args[2].strip('\' ')
         
         if pizzeria_id != '1999': #skip demo restaurant
-            print(pizzeria_id)
-            #try:
-            print('http://onlinepizza.se/menyer/%s_onlinepizza.se_UtkorPris_java.js' % pizzeria_id)
             pizzeria_src = urlopen('http://onlinepizza.se/menyer/%s_onlinepizza.se_UtkorPris_java.js' % pizzeria_id).read().decode('utf-8')
-            #except URLError:
-            #    continue
 
             pizzeria = Pizzeria(pizzeria_name, pizzeria_url)
             pizzerias.append(pizzeria)
