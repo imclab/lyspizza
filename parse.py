@@ -8,31 +8,37 @@ import sys
 
 
 def parse_pizzerias():
-    try:
-        pizzerias_src = urlopen('http://onlinepizza.se/Linkoping/').read().decode('latin-1')
-    except URLError:
-        #oops
-        pass
-    except:
-        pass
+    # try:
+    pizzerias_src = urlopen('http://onlinepizza.se/Linkoping/').read().decode('latin-1')
+    # except URLError:
+    #     #oops
+    #     pass
+    # except:
+    #     pass
 
     pizzerias = [];
 
-    pizzeria_expr = re.compile('<a href="(?P<url>http://[^?]+/)\?setIdentKey.*?id="pizzeriaListaNamn(?P<id>\d+)">(?P<name>[^<]+)')
+    pizzeria_expr = re.compile('printPizzeriaListItem(?:Premium)?\((?P<args>.*?\')\);')
     category_expr = re.compile('(?P<name>[^<]+)</a>')
     item_expr = re.compile('(?<!hintsKategorier)print[^ ]+Variant\((?P<data>[^;]+)\);')
     html_strip_expr = re.compile('<[^>]*>')
 
     pizzeria_iter = pizzeria_expr.finditer(pizzerias_src)
     for pizzeria_match in pizzeria_iter:
-        if pizzeria_match.group('id') != '1999': #skip demo restaurant
-            try:
-                pizzeria_src = urlopen('http://onlinepizza.se/menyer/%s_UtkorPris_java.js' % pizzeria_match.group('id')).read().decode('latin-1')
-            except URLError:
-                continue
+        args = pizzeria_match.group('args').split(',')
+        pizzeria_url = args[3].strip('\' ')
+        pizzeria_name = args[14].strip('\' ')
+        pizzeria_id = args[2].strip('\' ')
+        
+        if pizzeria_id != '1999': #skip demo restaurant
+            print(pizzeria_id)
+            #try:
+            print('http://onlinepizza.se/menyer/%s_onlinepizza.se_UtkorPris_java.js' % pizzeria_id)
+            pizzeria_src = urlopen('http://onlinepizza.se/menyer/%s_onlinepizza.se_UtkorPris_java.js' % pizzeria_id).read().decode('latin-1')
+            #except URLError:
+            #    continue
 
-            pizzeria_url = pizzeria_match.group('url') + '?action=setpristyp&pristyp=utkorning' #set delivery explicitly
-            pizzeria = Pizzeria(pizzeria_match.group('name'), pizzeria_url)
+            pizzeria = Pizzeria(pizzeria_name, pizzeria_url)
             pizzerias.append(pizzeria)
 
             category_srcs = pizzeria_src.split('hintsKategorier.hide();">')
