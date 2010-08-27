@@ -14,7 +14,7 @@ def parse_pizzerias():
 
     pizzeria_expr = re.compile('printPizzeriaListItem(?:Premium)?\((?P<args>.*?\')\);')
     category_expr = re.compile('(?P<name>[^<]+)</a>')
-    item_expr = re.compile('(?<!hintsKategorier)print[^ ]+Variant\((?P<data>[^;]+)\);')
+    item_expr = re.compile('(?<!hintsKategorier)print(?P<variant>Single|Multi)Variant\((?P<data>[^;]+)\);')
     html_strip_expr = re.compile('<[^>]*>')
 
     pizzeria_iter = pizzeria_expr.finditer(pizzerias_src)
@@ -41,9 +41,48 @@ def parse_pizzerias():
                 pizzeria.categories.append(category)
 
                 for item in item_expr.finditer(category_src):
-                    data = item.group('data')
-                    data = html_strip_expr.sub('', data)
-                    category.items.append(eval(data))
+                    rawdata = eval(html_strip_expr.sub('', item.group('data')))
+                    data = {}
+
+                    data['z-index'] = rawdata[0]
+                    data['listNum'] = rawdata[5]
+                    data['name'] = rawdata[6]
+
+                    if item.group('variant') == 'Single':
+                        data['multi'] = False
+                        
+                        data['hasRating'] = bool(rawdata[1])
+                        data['ratingImage'] = rawdata[2]
+                        data['rating'] = rawdata[3]
+                        data['id'] = rawdata[4]
+
+                        data['price'] = rawdata[7]
+                        data['hasImage'] = bool(rawdata[8])
+                        data['ingredients'] = rawdata[9]
+                        data['specialType'] = rawdata[10]
+                        data['unknown1'] = rawdata[11]
+                        data['unknown2'] = rawdata[12]
+                    else:
+                        data['multi'] = True
+
+                        data['id'] = rawdata[1]
+                        data['hasRating'] = bool(rawdata[2])
+                        data['ratingImage'] = rawdata[3]
+                        data['rating'] = rawdata[4]
+
+                        data['ingredients'] = rawdata[7]
+                        data['ingredientInfoTop'] = rawdata[8]
+                        data['ingredientInfoMargBottom'] = rawdata[9]
+                        data['hasImage'] = bool(rawdata[10])
+                        data['price'] = rawdata[11]
+                        data['variants'] = rawdata[12]
+                        data['variantPrices'] = rawdata[13]
+                        data['variantIDs'] = rawdata[14]
+                        data['unknown1'] = rawdata[15]
+                        data['unknown2'] = rawdata[16]
+                        
+                    
+                    category.items.append(data)
 
     return pizzerias
 
@@ -78,7 +117,7 @@ def main():
             print cat.name
             print "--------------------"
             for piv in cat.items:
-                print piv[6]
+                print piv['name']
 
 if __name__ == '__main__':
     main()
