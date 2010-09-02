@@ -19,12 +19,12 @@ def parse_pizzerias():
 
     pizzeria_iter = pizzeria_expr.finditer(pizzerias_src)
     for pizzeria_match in pizzeria_iter:
-        args = pizzeria_match.group('args').split(',')
-        pizzeria_url = args[3].strip('\' ')
-        pizzeria_name = args[14].strip('\' ')
-        pizzeria_id = args[2].strip('\' ')
+        pizzeria_data = eval(html_strip_expr.sub('',pizzeria_match.group('args')))
+        pizzeria_url = pizzeria_data[3]
+        pizzeria_name = pizzeria_data[14]
+        pizzeria_id = pizzeria_data[2]
         
-        if pizzeria_id != '1999': #skip demo restaurant
+        if pizzeria_id != 1999: #skip demo restaurant
             pizzeria_src = urlopen('http://onlinepizza.se/menyer/%s_onlinepizza.se_UtkorPris_java.js' % pizzeria_id).read().decode('utf-8')
 
             pizzeria = Pizzeria(pizzeria_name, pizzeria_url)
