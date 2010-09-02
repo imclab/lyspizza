@@ -119,5 +119,7 @@ def main():
             for piv in cat.items:
                 print piv['name']
 
+    print "\n\nListed %s pizzerias" % (len(pizzerias))
+
 if __name__ == '__main__':
     main()
