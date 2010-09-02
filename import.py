@@ -24,7 +24,8 @@ for p in pizzerias:
             sys.stdout.write(".")
             sys.stdout.flush()
             Item(pizzeria = p_obj, category = cat_obj, name = pizza['name'],
-                 number = pizza['listNum'], onlinepizza_id = pizza['id'])
+                 number = pizza['listNum'], price = pizza['price'],
+                 ingredients = pizza['ingredients'], onlinepizza_id = pizza['id']).save()
 
         cat_index += 1
 
