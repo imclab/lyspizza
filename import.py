@@ -22,16 +22,7 @@ for p in pizzerias:
         cat_obj.save()
         for pizza in cat.items:
             print ".",
-            if len(pizza) == 10:
-                Item(pizzeria = p_obj, category = cat_obj, name = pizza[6],
-                     number = pizza[5], price = pizza[7],
-                     ingredients = pizza[9], onlinepizza_id = pizza[4]).save()
-            elif len(pizza) == 15:
-                Item(pizzeria = p_obj, category = cat_obj, name = pizza[6],
-                     number = pizza[5], price = pizza[11],
-                     ingredients = pizza[7], onlinepizza_id = pizza[1]).save()
-            else:
-                print >> sys.stderr, "unknown data column number: %s" % (pizza)
-
+            Item(pizzeria = p_obj, category = cat_obj, name = pizza['name'],
+                 number = pizza['listNum'], onlinepizza_id = pizza['id'])
 
         cat_index += 1
