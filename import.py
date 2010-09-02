@@ -16,13 +16,16 @@ for p in pizzerias:
     p_obj = Pizzeria(name = p.name, url = p.url)
     p_obj.save()
     cat_index = 0
-    print "\n-" + p.name
+    print "%s: " % (p.name,)
     for cat in p.categories:
         cat_obj = ItemCategory(name = cat.name, index = cat_index, pizzeria = p_obj)
         cat_obj.save()
         for pizza in cat.items:
-            print ".",
+            sys.stdout.write(".")
+            sys.stdout.flush()
             Item(pizzeria = p_obj, category = cat_obj, name = pizza['name'],
                  number = pizza['listNum'], onlinepizza_id = pizza['id'])
 
         cat_index += 1
+
+    print
